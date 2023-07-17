@@ -1,13 +1,14 @@
 {
   "expo": {
-    "name": "Tinder_clone",
-    "slug": "Tinder_clone",
+    "name": "LunchBox",
+    "slug":"LunchBox",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/icon.png",
+    "icon": "./assets/lunchbox.png",
     "userInterfaceStyle": "light",
     "splash": {
-      "image": "./assets/splash.png",
+      // "image": "./assets/splash1.png",
+      "image": "./assets/lunchbox.png",
       "resizeMode": "contain",
       "backgroundColor": "#ffffff"
     },
@@ -19,7 +20,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/lunchbox.png",
         "backgroundColor": "#ffffff"
       }
     },
