@@ -44,7 +44,7 @@ const BottomTab = () => {
     <Tab.Navigator
       initialRouteName="Home"
       activeColor="#fff"
-      barStyle={{ backgroundColor: 'blue' }}
+      barStyle={{ backgroundColor: '#9AC5F4' }}
     >
       <Tab.Screen
         name="Home"

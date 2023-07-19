@@ -4,26 +4,45 @@ import {
   Text,
   View,
   TextInput,
+  Image,
   TouchableOpacity,
 } from "react-native";
 import { useDispatch } from "react-redux";
 import { setPhoneNumber } from "./store";
 import axios from "axios";
+import * as Device from "expo-device"; // Import the Device module
 import { useNavigation } from "@react-navigation/native";
 
-export default LoginScreen = () => {
+export default function LoginScreen() {
   console.log("Im in Login Screen");
   const [phoneNumberState, setPhoneNumberState] = useState("");
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
+  // const handleLogin = async () => {
+  //   try {
+  //     const response = await axios.post("your_api_endpoint", {
+  //       phoneNumber: phoneNumberState,
+  //     });
+  //     const isLoginSuccessful = response.data.success;
+
+  //     if (isLoginSuccessful) {
+  //       dispatch(setPhoneNumber(phoneNumberState));
+  //       navigation.navigate("Main"); // Uncomment this line to navigate to the 'Main' screen
+  //     } else {
+  //       console.log("Login failed");
+  //     }
+  //   } catch (error) {
+  //     console.error("Error logging in:", error);
+  //   }
+  // };
   const handleLogin = async () => {
     try {
-      const response = await axios.post("your_api_endpoint", {
-        phoneNumber: phoneNumberState,
-      });
-      const isLoginSuccessful = response.data.success;
-
+      // Update the API endpoint and pass the phoneNumber as a parameter
+      const response = await axios.get(`http://localhost:9000/auth/login/${phoneNumberState}`)
+      const isLoginSuccessful = response.data;
+      console.log("🚀 ~ file: Login.js:44 ~ handleLogin ~ isLoginSuccessful:", isLoginSuccessful)
+  
       if (isLoginSuccessful) {
         dispatch(setPhoneNumber(phoneNumberState));
         navigation.navigate("Main"); // Uncomment this line to navigate to the 'Main' screen
@@ -34,10 +53,13 @@ export default LoginScreen = () => {
       console.error("Error logging in:", error);
     }
   };
+  
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
+ <Image source={require('./assets/lunchbox.png')} style={styles.logo} />
+    
       <TextInput
         style={styles.input}
         placeholder="Phone Number"
@@ -51,30 +73,43 @@ export default LoginScreen = () => {
       </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "#f0f0f0", // Add a background color for the container
+    padding: 20, // Add some padding to create space between elements and screen edges
+  },
+  logo: {
+    width: 150,
+    height: 150,
+    borderRadius: 75,
+    marginBottom: 40,
   },
   title: {
     fontSize: 24,
-    marginBottom: 20,
+    fontWeight: "bold", // Make the title text bold
+    marginBottom: 40,
   },
   input: {
-    width: "80%",
+    width: "100%", // Use 100% width to fill the container
     height: 40,
-    borderColor: "gray",
+    borderColor: "#ccc", // Change border color to a light gray
     borderWidth: 1,
     marginBottom: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 15, // Increase the horizontal padding for better spacing
+    borderRadius: 5, // Add border radius to the input fields
+    backgroundColor: "#fff", // Add a white background to the input fields
   },
   button: {
+    width: "100%", // Use 100% width to fill the container
     backgroundColor: "blue",
-    padding: 10,
+    padding: 15, // Increase padding for better button size
     borderRadius: 5,
+    alignItems: "center", // Align text inside the button to the center
   },
   buttonText: {
     color: "white",
@@ -82,3 +117,4 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
+
