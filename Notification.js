@@ -28,20 +28,22 @@ export default function Notification() {
           const response = await axios.get(`http://localhost/data/trip/${phoneNumber}`);
           const tripData = response.data;
 
-// Date object
-const date = new Date();
+          function isToday(dateString) {
+            const today = new Date();
+            const dateObj = new Date(dateString);
+          
+            const todayYear = today.getUTCFullYear();
+            const todayMonth = today.getUTCMonth();
+            const todayDate = today.getUTCDate();
+          
+            const dateYear = dateObj.getUTCFullYear();
+            const dateMonth = dateObj.getUTCMonth();
+            const dateDate = dateObj.getUTCDate();
+          
+            return todayYear === dateYear && todayMonth === dateMonth && todayDate === dateDate;
+          }
 
-let currentDay= String(date.getDate()).padStart(2, '0');
-
-let currentMonth = String(date.getMonth()+1).padStart(2,"0");
-
-let currentYear = date.getFullYear();
-
-// we will display the date as DD-MM-YYYY 
-
-let currentDate = `${currentDay}-${currentMonth}-${currentYear}`;
-
-          if (tripData.pickup_time !== null) {
+          if (tripData.pickup_time !== null && isToday(tripData.date)) {
             // Trigger the notification if delivery time is not null
             await Notifications.presentNotificationAsync({
               title: 'LunchBox',
@@ -50,7 +52,7 @@ let currentDate = `${currentDay}-${currentMonth}-${currentYear}`;
               sound: 'default',
             });
           }
-          if (tripData.drop_time !== null) {
+          if (tripData.drop_time !== null && isToday(tripData.date)) {
             // Trigger the notification if pickup time is not null
             await Notifications.presentNotificationAsync({
               title: 'LunchBox',
