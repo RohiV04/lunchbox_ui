@@ -17,8 +17,54 @@ export default function Notification() {
   const [notification, setNotification] = useState(false);
   const notificationListener = useRef();
   const responseListener = useRef();
+  const phoneNumber = useSelector((state) => state.phoneNumber);
+
 
   useEffect(() => {
+    const triggerNotification = async () => {
+      if (phoneNumber) {
+        try {
+          // Make an API request to get trip data based on the phone number
+          const response = await axios.get(`http://localhost/data/trip/${phoneNumber}`);
+          const tripData = response.data;
+
+// Date object
+const date = new Date();
+
+let currentDay= String(date.getDate()).padStart(2, '0');
+
+let currentMonth = String(date.getMonth()+1).padStart(2,"0");
+
+let currentYear = date.getFullYear();
+
+// we will display the date as DD-MM-YYYY 
+
+let currentDate = `${currentDay}-${currentMonth}-${currentYear}`;
+
+          if (tripData.pickup_time !== null) {
+            // Trigger the notification if delivery time is not null
+            await Notifications.presentNotificationAsync({
+              title: 'LunchBox',
+              body: `Your Box is Picked Up at ${tripData.pickup_time}`,
+              data: { tripId: tripData.tripId }, // You can pass additional data if needed
+              sound: 'default',
+            });
+          }
+          if (tripData.drop_time !== null) {
+            // Trigger the notification if pickup time is not null
+            await Notifications.presentNotificationAsync({
+              title: 'LunchBox',
+              body: `Your Box is Delivered at ${tripData.drop_time}`,
+              data: { tripId: tripData.tripId }, // You can pass additional data if needed
+              sound: 'default',
+            });
+          }
+        } catch (error) {
+          console.error('Error fetching trip data:', error);
+        }
+      }
+    };
+
     const getPermission = async () => {
       if (Constants.isDevice) {
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
@@ -53,7 +99,7 @@ export default function Notification() {
     };
 
     getPermission();
-
+triggerNotification();
     notificationListener.current = Notifications.addNotificationReceivedListener((notification) => {
       setNotification(notification);
     });
@@ -64,7 +110,7 @@ export default function Notification() {
       Notifications.removeNotificationSubscription(notificationListener.current);
       Notifications.removeNotificationSubscription(responseListener.current);
     };
-  }, []);
+  }, [phoneNumber]);
 // Scheduled Notification
   // const onClick = async () => {
   //   await Notifications.scheduleNotificationAsync({
@@ -80,14 +126,14 @@ export default function Notification() {
   //     },
   //   });
   // };
-  const onClick = async () => {
-    await Notifications.presentNotificationAsync({
-      title: 'Lunchbox',
-      body: 'Button Clicked',
-      data: { data: 'data goes here' },
-      sound: 'default',
-    });
-  };
+  // const onClick = async () => {
+  //   await Notifications.presentNotificationAsync({
+  //     title: 'Lunchbox',
+  //     body: 'Button Clicked',
+  //     data: { data: 'data goes here' },
+  //     sound: 'default',
+  //   });
+  // };
 
   return (
     <View style={styles.container}>
