@@ -25,55 +25,36 @@ export default function Notification() {
       try {
         // Make an API request to get trip data based on the phone number
         const response = await axios.get(
-          `http://localhost:9000/data/trip/${phoneNumber}`
+          `http://localhost:3000/data/trip/${phoneNumber}`
         );
         const tripData = response.data;
-        console.log(tripData);
-        function isToday(dateString) {
-          const today = new Date();
-          const dateObj = new Date(dateString);
+        console.log(tripData[0]);
 
-          const todayYear = today.getUTCFullYear();
-          const todayMonth = today.getUTCMonth();
-          const todayDate = today.getUTCDate();
-
-          const dateYear = dateObj.getUTCFullYear();
-          const dateMonth = dateObj.getUTCMonth();
-          const dateDate = dateObj.getUTCDate();
-
-          return (
-            todayYear === dateYear &&
-            todayMonth === dateMonth &&
-            todayDate === dateDate
-          );
-        }
-
-        // if (tripData.pickup_time !== null && isToday(tripData.date)) {
-        if (isToday(tripData.pickup_time)) {
+        if (tripData[0].pickup_time != null) {
           console.log(
             "🚀 ~ file: notification.js:48 ~ triggerNotification ~ date:",
-            tripData.pickup_time
+            tripData[0].pickup_time
           );
           // Trigger the notification if delivery time is not null
 
           await Notifications.presentNotificationAsync({
             title: "LunchBox",
-            body: `Your Box is Picked Up at ${tripData.pickup_time}`,
+            body: `Your Box is Picked Up at ${tripData[0].pickup_time}`,
             data: { tripId: tripData.tripId }, // You can pass additional data if needed
             sound: "default",
           });
           setSend(true);
         }
-        // if (tripData.drop_time !== null && isToday(tripData.date)) {
-        if (isToday(tripData.drop_time)) {
+
+        if (tripData[0].drop_time != null) {
           console.log(
             "🚀 ~ file: notification.js:59 ~ triggerNotification ~ date:",
-            tripData.drop_time
+            tripData[0].drop_time
           );
           // Trigger the notification if pickup time is not null
           await Notifications.presentNotificationAsync({
             title: "LunchBox",
-            body: `Your Box is Delivered at ${tripData.drop_time}`,
+            body: `Your Box is Delivered at ${tripData[0].drop_time}`,
             data: { tripId: tripData.tripId }, // You can pass additional data if needed
             sound: "default",
           });
@@ -159,5 +140,5 @@ export default function Notification() {
     });
   };
 
-  return <></>;
+  return <>This Is Notification</>;
 }

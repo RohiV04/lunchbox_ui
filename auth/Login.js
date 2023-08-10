@@ -8,41 +8,23 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useDispatch } from "react-redux";
-import { setPhoneNumber } from "./store";
+import { setPhoneNumber } from "../redux/store";
 import axios from "axios";
-import * as Device from "expo-device"; // Import the Device module
 import { useNavigation } from "@react-navigation/native";
 
 export default function LoginScreen() {
-  console.log("Im in Login Screen");
   const [phoneNumberState, setPhoneNumberState] = useState("");
   const dispatch = useDispatch();
   const navigation = useNavigation();
 
-  // const handleLogin = async () => {
-  //   try {
-  //     const response = await axios.post("your_api_endpoint", {
-  //       phoneNumber: phoneNumberState,
-  //     });
-  //     const isLoginSuccessful = response.data.success;
-
-  //     if (isLoginSuccessful) {
-  //       dispatch(setPhoneNumber(phoneNumberState));
-  //       navigation.navigate("Main"); // Uncomment this line to navigate to the 'Main' screen
-  //     } else {
-  //       console.log("Login failed");
-  //     }
-  //   } catch (error) {
-  //     console.error("Error logging in:", error);
-  //   }
-  // };
   const handleLogin = async () => {
     try {
       // Update the API endpoint and pass the phoneNumber as a parameter
-      const response = await axios.get(`http://localhost:9000/auth/login/${phoneNumberState}`)
+      const response = await axios.get(
+        `http://localhost:3000/auth/login/${phoneNumberState}`
+      );
       const isLoginSuccessful = response.data;
-      console.log("🚀 ~ file: Login.js:44 ~ handleLogin ~ isLoginSuccessful:", isLoginSuccessful)
-  
+
       if (isLoginSuccessful) {
         dispatch(setPhoneNumber(phoneNumberState));
         navigation.navigate("Main"); // Uncomment this line to navigate to the 'Main' screen
@@ -53,13 +35,12 @@ export default function LoginScreen() {
       console.error("Error logging in:", error);
     }
   };
-  
 
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Login</Text>
- <Image source={require('./assets/lunchbox.png')} style={styles.logo} />
-    
+      <Image source={require("../assets/lunchbox.png")} style={styles.logo} />
+
       <TextInput
         style={styles.input}
         placeholder="Phone Number"
@@ -117,4 +98,3 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
 });
-

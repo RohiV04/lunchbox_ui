@@ -4,10 +4,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import { NavigationContainer } from '@react-navigation/native';
-import Home from './Home.js';
-import Notification from './Notification.js';
-import LoginScreen from './Login.js';
-import { View, StyleSheet, Text } from 'react-native';
+import Home from '../screens/Home.js';
+import Notification from '../utils/Notification.js';
+import LoginScreen from '../auth/Login.js';
+import Profile from '../screens/Profile.js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 const Stack = createStackNavigator();
@@ -19,7 +19,7 @@ export default function Navigation() {
 
   // Check if the phoneNumber is set (not null)
   const isLoggedIn = phoneNumber !== null;
-console.log(isLoggedIn);
+
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -30,11 +30,18 @@ console.log(isLoggedIn);
             options={{ headerShown: false }}
           />
         ) : (
+          <>
           <Stack.Screen
             name="Main"
             component={BottomTab}
             options={{ headerShown: false }}
           />
+          <Stack.Screen
+            name="Notification"
+            component={Notification}
+            options={{ headerShown: false }}
+          />
+          </>
         )}
       </Stack.Navigator>
     </NavigationContainer>
@@ -66,11 +73,11 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name="Notification"
-        component={Notification}
+        name="Profile"
+        component={Profile}
         options={{
           tabBarIcon: ({ color }) => (
-            <MaterialCommunityIcons name="bell" color={color} size={26} />
+            <MaterialCommunityIcons name="account" color={color} size={26} />
           ),
         }}
       />
