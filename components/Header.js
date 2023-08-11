@@ -28,7 +28,7 @@ const Header = () => {
   return (
     <View style={styles.container}>
       <Text style={styles.headerText}>
-        {parentData ? `Welcome ${parentData.p_name}` : "Loading..."}
+        {parentData ? `Welcome ${parentData.p_name} ` : "Loading..."}
       </Text>
     </View>
   );

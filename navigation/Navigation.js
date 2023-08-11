@@ -11,6 +11,7 @@ import Profile from '../screens/Profile.js';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 const Stack = createStackNavigator();
+import { SafeAreaProvider } from 'react-native-safe-area-context';
 const Tab = createMaterialBottomTabNavigator();
 
 export default function Navigation() {
@@ -21,6 +22,7 @@ export default function Navigation() {
   const isLoggedIn = phoneNumber !== null;
 
   return (
+    <SafeAreaProvider>
     <NavigationContainer>
       <Stack.Navigator>
         {!isLoggedIn ? (
@@ -45,6 +47,7 @@ export default function Navigation() {
         )}
       </Stack.Navigator>
     </NavigationContainer>
+    </SafeAreaProvider>
   );
 }
 
